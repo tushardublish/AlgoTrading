@@ -15,7 +15,7 @@ class QLearner(object):
         gamma = 1.0, \
         rar = 0.5, \
         radr = 0.99, \
-        trade_penalty = 7, \
+        trade_penalty = 10, \
         dyna = 200, \
         verbose = False):
 
@@ -55,8 +55,8 @@ class QLearner(object):
         @returns: The selected action
         """
         a_prime = self.getnextaction(s_prime)
-        self.rar = self.rar*self.radr
-        if self.verbose: print self.rar
+        # self.rar = self.rar*self.radr
+        # if self.verbose: print self.rar
 
         # Apply penalty to take trade to simulate brokerage
         if self.a != 0:
@@ -97,10 +97,17 @@ class QLearner(object):
     def getnextaction(self, s_prime):
         magic_number = np.random.random()
         if magic_number < self.rar:
-            a_prime  = np.random.randint(0, self.num_actions)
+            a_prime = np.random.randint(0, self.num_actions)
         else:
             a_prime = self.qvalues_array[s_prime].argmax()
         return a_prime
+
+    def getQValues(self, s):
+        return self.qvalues_array[s]
+
+    def setRar(self, rar):
+        # print "rar: ", rar
+        self.rar = rar
 
 if __name__=="__main__":
     print "Remember Q from Star Trek? Well, this isn't him"
