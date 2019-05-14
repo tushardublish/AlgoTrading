@@ -1,9 +1,4 @@
 import datetime as dt
-import pandas as pd
-import numpy as np
-import util as ut
-
-import datetime as dt
 import QLearner as ql
 import pandas as pd
 import numpy as np
@@ -34,7 +29,7 @@ class StrategyLearner(object):
 
     # train qlearner for trading
     def addEvidence(self, symbol, dates):
-        iterations = 50     # set the numberof iterations to go through the training set
+        iterations = 30     # set the numberof iterations to go through the training set
         trainX, daily_returns = self.get_features_data(dates)
         states = self.discretize(trainX)
         trading_dates = trainX.index    # do not use states index as dropna has been applied on it
@@ -105,7 +100,7 @@ class StrategyLearner(object):
                     trades.ix[date] = -self.qty
 
             profit = self.compute_portvals(orders)
-            print str(iter+1) + '. final portfolio value =',sv + profit
+            print str(iter+1) + '. final portfolio value =',sv + profit, ', trades = ', len(orders)
 
             # if process == 'TEST':
             #     print orders

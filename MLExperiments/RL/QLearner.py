@@ -12,9 +12,10 @@ class QLearner(object):
         num_states=100, \
         num_actions = 4, \
         alpha = 0.2, \
-        gamma = 0.9, \
+        gamma = 1.0, \
         rar = 0.5, \
         radr = 0.99, \
+        trade_penalty = 7, \
         dyna = 200, \
         verbose = False):
 
@@ -25,6 +26,7 @@ class QLearner(object):
         self.orginalrar = rar
         self.rar = rar
         self.radr = radr
+        self.trade_penalty = trade_penalty
         self.dyna = dyna
         self.verbose = verbose
         self.s = 0
@@ -55,6 +57,10 @@ class QLearner(object):
         a_prime = self.getnextaction(s_prime)
         self.rar = self.rar*self.radr
         if self.verbose: print self.rar
+
+        # Apply penalty to take trade to simulate brokerage
+        if self.a != 0:
+            r = r - self.trade_penalty
 
         qvalue_prime = self.qvalues_array[s_prime, a_prime]
         qvalue = (1-self.alpha)*self.qvalues_array[self.s, self.a] + self.alpha*(r + self.gamma*qvalue_prime)
